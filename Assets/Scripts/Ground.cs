@@ -11,7 +11,7 @@ public class Ground
     //Pass the texture path and the speed of the terrain
     public Ground(string _path, float _speed) {
         Texture2D temp_text = Resources.Load("Textures/Grounds/" + _path) as Texture2D;
-        sprite = Sprite.Create(temp_text, new Rect(0, 0, temp_text.width, temp_text.height), new Vector2(0, 0));
+        sprite = Sprite.Create(temp_text, new Rect(0, 0, 64,64), new Vector2(0, 0));
         _speed = 1.0f;
     }
 

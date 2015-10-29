@@ -12,16 +12,25 @@ public class Main : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
         loadGrounds();
 
         GameObject camera = new GameObject();
         camera.transform.position = new Vector3(0, 0, -10);
-        camera.AddComponent<Camera>();
+        Camera cam_cmp = camera.AddComponent<Camera>();
         camera.name = "Camera";
-        GameObject tile_go = Instantiate(Resources.Load("Prefabs/Tile")) as GameObject;
-        Tile tile_scr = tile_go.GetComponent<Tile>();
-        tile_scr.SetTerrain(grounds[0]);
-        tile_go.transform.position = new Vector2(0,0);
+        cam_cmp.orthographic =true;
+        cam_cmp.orthographicSize = 300;
+        for (int i = -5; i <= 5; i++)
+        {
+            for (int j = -5; j <= 5; j++)
+            {
+                GameObject tile_go = Instantiate(Resources.Load("Prefabs/Tile")) as GameObject;
+                Tile tile_scr = tile_go.GetComponent<Tile>();
+                tile_scr.SetTerrain(grounds[0]);
+                tile_scr.SetPosition(i, j);
+            }
+        }
   	}
 	
 	// Update is called once per frame
