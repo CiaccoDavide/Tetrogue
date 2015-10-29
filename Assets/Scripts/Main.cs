@@ -9,13 +9,11 @@ public class Main : MonoBehaviour {
         camera.transform.position = new Vector3(0, 0, -10);
         camera.AddComponent<Camera>();
         camera.name = "Camera";
-        GameObject player = new GameObject();
-        Texture2D texture = Resources.Load("Textures/doge") as Texture2D;
-        Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width,texture.height), new Vector2(0, 0));
-        SpriteRenderer sp = player.AddComponent<SpriteRenderer>();
-        sp.sprite = sprite;
-        player.name = "Player";
-        player.transform.position = new Vector2(-sp.bounds.size.x / 2.0f, -sp.bounds.size.y / 2.0f);
+        Ground terrain_scr = new Ground("doge", 2.0f);
+        GameObject tile_go = Instantiate(Resources.Load("Prefabs/Tile")) as GameObject;
+        Tile tile_scr = tile_go.GetComponent<Tile>();
+        tile_scr.SetTerrain(terrain_scr);
+        tile_go.transform.position = new Vector2(0,0);
   	}
 	
 	// Update is called once per frame
