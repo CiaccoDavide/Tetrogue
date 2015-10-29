@@ -1,6 +1,1 @@
-linea, 1.0
-linea, 2.0
-linea, 3.0
-linea, 4.0
-linea, 5.0
-linea, 6.0
+doge, 1.0
