@@ -3,11 +3,22 @@ using System.Collections;
 
 public class Tile : MonoBehaviour {
 
-    public enum Direction { Right, Left, Down }
 
     static int TileSize = 64;
-    private Ground terrain;
+
+    public int x, y;
+
+    private Ground ground;
     private float speed;
+
+
+    public Tile(int _x, int _y)
+    {
+        x = _x;
+        y = _y;
+    }
+
+
     
    	// Use this for initialization
 	void Start () {
@@ -19,10 +30,10 @@ public class Tile : MonoBehaviour {
 	
 	}
 
-    public void SetTerrain(Ground t)
+    public void SetGround(Ground t)
     {
         GetComponent<SpriteRenderer>().sprite = t.sprite;
-        terrain = t;
+        ground = t;
     }
 
     public void SetPosition(int x, int y)
@@ -32,16 +43,9 @@ public class Tile : MonoBehaviour {
 
     }
 
-    public void MoveRight()
+    public void Move(Block.Direction dir)
     {
-
+     
     }
-    public void MoveLeft()
-    {
 
-    }
-    public void MoveDown()
-    {
-
-    }
 }
