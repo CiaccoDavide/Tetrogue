@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Tile : MonoBehaviour {
 
-
+    static int PixelToUnit = 100; //Default in Unity, don't change
     static int TileSize = 64;
 
     public int x, y;
@@ -38,9 +38,7 @@ public class Tile : MonoBehaviour {
 
     public void SetPosition(int x, int y)
     {
-        transform.position = new Vector3(TileSize / 2 * x, TileSize / 2 * y,0);
-        transform.localScale = new Vector2(TileSize,TileSize);
-
+        transform.position = new Vector3(x * TileSize * 1.0f/PixelToUnit, y * TileSize * 1.0f/PixelToUnit, 0);
     }
 
     public void Move(Block.Direction dir)

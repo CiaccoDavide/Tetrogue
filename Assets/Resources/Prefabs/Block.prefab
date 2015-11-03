@@ -8,6 +8,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 478844}
+  - 114: {fileID: 11494816}
   m_Layer: 0
   m_Name: Block
   m_TagString: Untagged
@@ -27,6 +28,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!114 &11494816
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 103550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a8868e51f9818647922f0a2f2ea836d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
