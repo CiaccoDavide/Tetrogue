@@ -42,10 +42,10 @@ static class FileLoader
         return grounds;
     }
 
-    public static Dictionary<Block.Shape, List<Block.Offset>> LoadBlocks()
+    public static Dictionary<Block.Shape, List<Block.Coords>> LoadBlocks()
     {
         Block.Shape temp_shape;
-        Dictionary<Block.Shape,List<Block.Offset>> temp_blueprints = new Dictionary<Block.Shape,List<Block.Offset>>();
+        Dictionary<Block.Shape,List<Block.Coords>> temp_blueprints = new Dictionary<Block.Shape,List<Block.Coords>>();
         string temp_string;
   
         using (StreamReader r = new StreamReader(blocks_path))
@@ -54,12 +54,12 @@ static class FileLoader
             {
                 string[] substrings = temp_string.Split(',');
                 temp_shape = name_enum[substrings[0]];
-                temp_blueprints[temp_shape] = new List<Block.Offset>();
+                temp_blueprints[temp_shape] = new List<Block.Coords>();
                 for (int i = 1; i < substrings.Length; i++)
                 {
                     string[] pos = substrings[i].Split('-');
                     //Create whole gameobject of the tile with prefab
-                    temp_blueprints[temp_shape].Add(new Block.Offset(int.Parse(pos[0]), int.Parse(pos[1])));
+                    temp_blueprints[temp_shape].Add(new Block.Coords(int.Parse(pos[0]), int.Parse(pos[1])));
                 }
             }
         }
