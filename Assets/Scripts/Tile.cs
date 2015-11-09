@@ -6,7 +6,7 @@ public class Tile : MonoBehaviour {
 
     public static int TileSize = 64;
 
-    public int x, y;
+    public short x, y;
 
     private Ground ground;
     private float speed;
@@ -26,8 +26,10 @@ public class Tile : MonoBehaviour {
         ground = t;
     }
 
-    public void SetPosition(int x, int y)
+    public void SetPosition(short _x, short _y)
     {
+        x=_x;
+        y=_y;
         float conversion =  TileSize * 1.0f/Global.PixelToUnit;
         transform.position = new Vector3(x * conversion, y * conversion, 0);
     }

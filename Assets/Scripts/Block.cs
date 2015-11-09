@@ -7,14 +7,15 @@ public class Block : MonoBehaviour
     //Just a struct to hold x and y
     public struct Coords
     {
-        public Coords(int _x, int _y)
+        public Coords(short _x, short _y)
         {
             x = _x;
             y = _y;
         }
-        public int x, y;
+        public short x, y;
     }
 
+    public readonly static short Size = 4;
     public enum Direction { Right, Left, Down }
     public enum Shape { Line, Cube, Stair, Gun, Ufo, TotalNumber }
 
@@ -29,6 +30,8 @@ public class Block : MonoBehaviour
     public Shape shape;         //Shape of the block
 
     private Coords coords;      //Position (in field coordinates)
+
+    private short margin;
 
     //"Constructor"
     public static Block Create()
@@ -56,31 +59,70 @@ public class Block : MonoBehaviour
             temp_tile.gameObject.transform.parent = transform;
             tiles[i] = temp_tile;
         }
+        Roll();
+        PushLeft();
+        PushDown();
+        CalculateMargin();
         //Set the position at the top of the field in a random position.
         //Need a few optimization if the block is not 
-        SetPosition(Random.Range(0,6),12);
+        SetPosition((short)Random.Range(0,Field.Width-Block.Size+margin+1),(short)12);
+    }
+
+    private void PushLeft(){
+        short min=4;
+        for(short i=0; i<4;i++) 
+            if(tiles[i].x<min) min=tiles[i].x;
+        for(short i=0; i<4;i++) 
+            tiles[i].SetPosition((short)(tiles[i].x-min),tiles[i].y);
+    }
+    private void PushDown(){
+        short min=4;
+        for(short i=0; i<4;i++) 
+            if(tiles[i].y<min) min=tiles[i].y;
+        for(short i=0; i<4;i++) 
+            tiles[i].SetPosition(tiles[i].x,(short)(tiles[i].y-min));
+    }
+    private void CalculateMargin(){
+        short max=0;
+        for(short i=0; i<4;i++) 
+            if(tiles[i].x>max) max=tiles[i].x;
+        margin=(short)(3-max);
+    }
+    private void Roll(){
+        if(Random.Range(0,2)==0)
+            for(short i=0; i<4;i++)
+                tiles[i].SetPosition(tiles[i].x,(short)(4-tiles[i].y));
+        if(Random.Range(0,2)==0)
+            for(short i=0; i<4;i++)
+                tiles[i].SetPosition((short)(4-tiles[i].x),tiles[i].y);
+        if(Random.Range(0,2)==0)
+            for(short i=0; i<4;i++)
+                tiles[i].SetPosition(tiles[i].y,tiles[i].x);
+
     }
 
     //Set the position of the block.
     //The tiles move with it cause they are children
-    private void SetPosition(int x, int y)
+    private void SetPosition(short x, short y)
     {
         coords.x = x;
         coords.y = y;
         float conversion = Tile.TileSize * 1.0f / Global.PixelToUnit;
-        transform.position = new Vector3((x - Field.FieldWidth / 2) * conversion, (y - Field.FieldHeight / 2) * conversion, 0);
+        transform.position = new Vector3(((int)x - Field.Width / 2) * conversion, ((int)y - Field.Height / 2) * conversion, 0);
     }
 
     void MoveRight()
     {
-        SetPosition(coords.x + 1, coords.y);
+        if(coords.x<Field.Width-Block.Size+margin)
+            SetPosition((short)(coords.x + 1), coords.y);
     }
     void MoveLeft()
     {
-        SetPosition(coords.x - 1, coords.y);
+        if(coords.x>0)
+            SetPosition((short)(coords.x - 1), coords.y);
     }
     void MoveDown()
     {
-        SetPosition(coords.x, coords.y - 1);
+        SetPosition(coords.x, (short)(coords.y - 1));
     }
 }

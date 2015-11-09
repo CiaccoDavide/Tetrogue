@@ -56,7 +56,7 @@ static class FileLoader
                 {
                     string[] pos = substrings[i+1].Split('-');
                     //Create whole gameobject of the tile with prefab
-                    temp_blueprints[temp_shape][i] = new Block.Coords(int.Parse(pos[0]), int.Parse(pos[1]));
+                    temp_blueprints[temp_shape][i] = new Block.Coords(short.Parse(pos[0]), short.Parse(pos[1]));
                 }
             }
         }

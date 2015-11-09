@@ -7,8 +7,8 @@ public class Field : MonoBehaviour {
     Block block; 
 
     //Size of the field
-    public static int FieldWidth = 8;
-    public static int FieldHeight = 12;
+    public readonly static int Width = 8;
+    public readonly static int Height = 12;
    
     //"Constructor"
     public static Field Create()
