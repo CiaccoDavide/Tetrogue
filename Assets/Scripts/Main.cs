@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class Main : MonoBehaviour
 {
+    private Field field;
 
     void Start()
     {
@@ -11,10 +12,13 @@ public class Main : MonoBehaviour
         Camera camera =  CreateCamera();
         
         //Create field
-        Field field = Field.Create();
+        field = Field.Create();
       
     }
      
+    void Update(){
+        field.HandleInput();
+    }
 
     Camera CreateCamera()
     {

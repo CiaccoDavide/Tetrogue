@@ -66,6 +66,7 @@ public class Block : MonoBehaviour
         //Set the position at the top of the field in a random position.
         //Need a few optimization if the block is not 
         SetPosition((short)Random.Range(0,Field.Width-Block.Size+margin+1),(short)12);
+        InvokeRepeating("MoveDown", 1, 1);
     }
 
     private void PushLeft(){
@@ -111,18 +112,18 @@ public class Block : MonoBehaviour
         transform.position = new Vector3(((int)x - Field.Width / 2) * conversion, ((int)y - Field.Height / 2) * conversion, 0);
     }
 
-    void MoveRight()
+    public void MoveRight()
     {
         if(coords.x<Field.Width-Block.Size+margin)
             SetPosition((short)(coords.x + 1), coords.y);
     }
-    void MoveLeft()
+    public void MoveLeft()
     {
         if(coords.x>0)
             SetPosition((short)(coords.x - 1), coords.y);
     }
-    void MoveDown()
+    public void MoveDown()
     {
-        SetPosition(coords.x, (short)(coords.y - 1));
+       SetPosition(coords.x, (short)(coords.y - 1));
     }
 }

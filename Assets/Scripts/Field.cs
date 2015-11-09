@@ -4,7 +4,7 @@ using System.Collections;
 public class Field : MonoBehaviour {
 
     //the field holds a single block
-    Block block; 
+    private Block block; 
 
     //Size of the field
     public readonly static int Width = 8;
@@ -22,5 +22,13 @@ public class Field : MonoBehaviour {
         field_scr.block.gameObject.transform.parent = field.transform;
         field_scr.block.ResetBlock();
         return field_scr;
+    }
+    public void HandleInput(){
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+            block.MoveLeft();
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+            block.MoveRight();
+        if (Input.GetKey(KeyCode.DownArrow))
+            block.MoveDown();
     }
 }
