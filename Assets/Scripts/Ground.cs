@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+
 
 public class Ground
 {
@@ -7,6 +9,9 @@ public class Ground
     public Sprite sprite;
     //Walking speed multiplier of the terrain
     public float speed;
+
+    //List of grounds loaded from file
+    public static List<Ground> grounds = FileLoader.LoadGrounds();
 
     //Pass the texture path and the speed of the terrain
     public Ground(string _path, float _speed) {

@@ -16,15 +16,15 @@ public class Block : MonoBehaviour
     }
 
     public enum Direction { Right, Left, Down }
-    public enum Shape { Line, Cube, Stair, Cross, Serpent, Gun, Ufo, Abort, TotalNumber }
+    public enum Shape { Line, Cube, Stair, Gun, Ufo, TotalNumber }
 
     //Blueprint dictionary that contains the informations to place tiles in a block.
     //Shape is the type of block, List<Coords> is the list of the offset of the tiles inside the block.
     //Everything is loaded from file
-    public static Dictionary<Shape, List<Coords>> Blueprints = FileLoader.LoadBlocks();
+    public static Dictionary<Shape, Coords[]> Blueprints = FileLoader.LoadBlocks();
 
    
-    private List<Tile> tiles;   //List of tiles inside the block
+    private Tile[] tiles = new Tile[4];   //List of tiles inside the block
 
     public Shape shape;         //Shape of the block
 
@@ -37,7 +37,6 @@ public class Block : MonoBehaviour
         block_go = Instantiate(Resources.Load("Prefabs/Block")) as GameObject;
         block_go.name = "Block";
         Block block_scr = block_go.GetComponent<Block>();
-        block_scr.tiles = new List<Tile>();
         return block_scr;
     }
 
@@ -48,13 +47,14 @@ public class Block : MonoBehaviour
         Tile temp_tile;
         //Create the tiles and position them
         Shape random_shape = (Shape)Random.Range(0, (int)Shape.TotalNumber);
-        foreach (Coords off in Blueprints[random_shape])
+        for (int i =0; i < 4; i++)
         {
+            Coords off = Blueprints[random_shape][i];
             temp_tile = Tile.Create();
             temp_tile.SetPosition(off.x, off.y);
-            temp_tile.SetGround(Tile.grounds[0]);
+            temp_tile.SetGround(Ground.grounds[0]);
             temp_tile.gameObject.transform.parent = transform;
-            tiles.Add(temp_tile);
+            tiles[i] = temp_tile;
         }
         //Set the position at the top of the field in a random position.
         //Need a few optimization if the block is not 
@@ -69,11 +69,6 @@ public class Block : MonoBehaviour
         coords.y = y;
         float conversion = Tile.TileSize * 1.0f / Global.PixelToUnit;
         transform.position = new Vector3((x - Field.FieldWidth / 2) * conversion, (y - Field.FieldHeight / 2) * conversion, 0);
-    }
-    
-    public void AddTile(Tile tile)
-    {
-        tiles.Add(tile);
     }
 
     void MoveRight()

@@ -1,11 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 public class Tile : MonoBehaviour {
 
-    //List of grounds loaded from file
-    public static List<Ground> grounds = FileLoader.LoadGrounds();
 
     public static int TileSize = 64;
 
