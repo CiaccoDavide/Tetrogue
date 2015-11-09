@@ -25,13 +25,15 @@ public class Block : MonoBehaviour
     public static Dictionary<Shape, Coords[]> Blueprints = FileLoader.LoadBlocks();
 
    
-    private Tile[] tiles = new Tile[4];   //List of tiles inside the block
+    public Tile[] tiles = new Tile[4];   //List of tiles inside the block
 
     public Shape shape;         //Shape of the block
 
     private Coords coords;      //Position (in field coordinates)
 
     private short margin;
+
+    public Field field;
 
     //"Constructor"
     public static Block Create()
@@ -40,6 +42,7 @@ public class Block : MonoBehaviour
         block_go = Instantiate(Resources.Load("Prefabs/Block")) as GameObject;
         block_go.name = "Block";
         Block block_scr = block_go.GetComponent<Block>();
+        
         return block_scr;
     }
 
@@ -54,9 +57,9 @@ public class Block : MonoBehaviour
         {
             Coords off = Blueprints[random_shape][i];
             temp_tile = Tile.Create();
+            temp_tile.gameObject.transform.parent = transform;
             temp_tile.SetPosition(off.x, off.y);
             temp_tile.SetGround(Ground.grounds[0]);
-            temp_tile.gameObject.transform.parent = transform;
             tiles[i] = temp_tile;
         }
         Roll();
@@ -66,7 +69,6 @@ public class Block : MonoBehaviour
         //Set the position at the top of the field in a random position.
         //Need a few optimization if the block is not 
         SetPosition((short)Random.Range(0,Field.Width-Block.Size+margin+1),(short)12);
-        InvokeRepeating("MoveDown", 1, 1);
     }
 
     private void PushLeft(){
@@ -109,21 +111,111 @@ public class Block : MonoBehaviour
         coords.x = x;
         coords.y = y;
         float conversion = Tile.TileSize * 1.0f / Global.PixelToUnit;
-        transform.position = new Vector3(((int)x - Field.Width / 2) * conversion, ((int)y - Field.Height / 2) * conversion, 0);
+        transform.localPosition = new Vector3(((int)x - Field.Width / 2) * conversion, ((int)y - Field.Height / 2) * conversion, 0);
     }
 
     public void MoveRight()
     {
-        if(coords.x<Field.Width-Block.Size+margin)
+        if(coords.x<Field.Width-Block.Size+margin && !CollidesRight())
             SetPosition((short)(coords.x + 1), coords.y);
     }
     public void MoveLeft()
     {
-        if(coords.x>0)
+        if(coords.x>0 && !CollidesLeft())
             SetPosition((short)(coords.x - 1), coords.y);
     }
     public void MoveDown()
     {
-       SetPosition(coords.x, (short)(coords.y - 1));
+        //Se il blocco tocca terra o se collide con altre celle...
+        if (coords.y == 0 || CollidesDown())
+        {
+            //...sposta le celle nella griglia del campo e resetta il blocco
+            MoveToGrid();
+            ResetBlock();
+        }
+        //altrimenti muovi in basso
+        else
+            SetPosition(coords.x, (short)(coords.y - 1));
+    }
+
+    bool CollidesDown()
+    {
+        //**Step 1**: Trova la y minore per ogni colonna del blocco.
+        //Set the initial minimum to the max value of y
+        short Max = (short)(Field.Height+1);
+        short[] min = new short[4]{Max,Max,Max,Max};
+        //Per ogni tile...
+        for (short i = 0; i < 4; i++)
+        {
+            //Se la sua posizione e' minore del minimo corrente diventa il nuovo minimo
+            if (tiles[i].y + coords.y < min[tiles[i].x])
+                min[tiles[i].x] = (short)(tiles[i].y + coords.y);
+        }
+
+        //**Step 2**: Controlla se le caselle appena sotto i minimi sono vuote
+        //Per ogni colonna...
+        for (short i = 0; i < 4; i++){
+            //Check per evitare problemi se:
+            //1) il blocco e' troppo a destra
+            //2) se non ci sono blocchi in quella colonna
+            if (i + coords.x >= Field.Width || min[i] == Field.Height+1)
+                continue;
+            //Se la casella non e' vuota -> collisione
+            if (field.grid[i + coords.x,min[i]-1]!=null)
+                return true;
+        }
+        return false;
+    }
+
+    bool CollidesLeft()
+    {
+        //Stessa documentazione di CollidesDown
+        short Max = (short) (Field.Width - 1);
+        short[] min = new short[4] { Max, Max, Max, Max };
+        for (short i = 0; i < 4; i++)
+        {
+            if (tiles[i].x + coords.x < min[tiles[i].y])
+                min[tiles[i].y] = (short)(tiles[i].x + coords.x);
+        }
+
+        for (short i = 0; i < 4; i++)
+        {
+            if (i + coords.y >= Field.Height)
+                continue;
+            if (field.grid[min[i] - 1, i + coords.y] != null)
+                return true;
+        }
+        return false;
+    }
+
+    bool CollidesRight()
+    {
+        //Stessa documentazione di CollidesDown
+        short[] min = new short[4] { 0, 0, 0, 0 };
+        for (short i = 0; i < 4; i++)
+        {
+            if (tiles[i].x + coords.x > min[tiles[i].y])
+                min[tiles[i].y] = (short)(tiles[i].x + coords.x);
+        }
+
+        for (short i = 0; i < 4; i++)
+        {
+            if (i + coords.y >= Field.Height)
+                continue;
+            if (field.grid[min[i] + 1, i + coords.y] != null)
+                return true;
+        }
+        return false;
+    }
+
+    void MoveToGrid()
+    {
+        for (short i = 0; i < 4; i++)
+        {
+            tiles[i].x += coords.x;
+            tiles[i].y += coords.y;
+            field.AddToGrid(tiles[i]);
+            tiles[i] = null;
+        }
     }
 }

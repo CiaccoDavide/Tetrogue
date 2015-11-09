@@ -31,6 +31,6 @@ public class Tile : MonoBehaviour {
         x=_x;
         y=_y;
         float conversion =  TileSize * 1.0f/Global.PixelToUnit;
-        transform.position = new Vector3(x * conversion, y * conversion, 0);
+        transform.localPosition = new Vector3(x * conversion, y * conversion, 0);
     }
 }
