@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -34,6 +34,8 @@ public class Block : MonoBehaviour
     private short margin;
 
     public Field field;
+
+    private float timer=0;
 
     //"Constructor"
     public static Block Create()
@@ -126,6 +128,8 @@ public class Block : MonoBehaviour
     }
     public void MoveDown()
     {
+        // il timer viene resettato qui così non si rischia di mandarlo giù accidentalmente più di quanto desiderato
+        timer=0;
         //Se il blocco tocca terra o se collide con altre celle...
         if (coords.y == 0 || CollidesDown())
         {
@@ -217,5 +221,12 @@ public class Block : MonoBehaviour
             field.AddToGrid(tiles[i]);
             tiles[i] = null;
         }
+    }
+
+    void Update(){
+        timer += Time.deltaTime;
+        // muovi il blocco verso il basso ogni secondo
+        if(timer>1)
+            MoveDown();
     }
 }
