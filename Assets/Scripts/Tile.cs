@@ -3,13 +3,13 @@ using System.Collections;
 
 public class Tile : MonoBehaviour {
 
-
     public static int TileSize = 64;
 
     public short x, y;
 
     private Ground ground;
     private float speed;
+    public bool walkable = true;
 
     //"Constructor"
     public static Tile Create()
@@ -17,7 +17,6 @@ public class Tile : MonoBehaviour {
         GameObject tile_go = Instantiate(Resources.Load("Prefabs/Tile")) as GameObject;
         tile_go.name = "Tile";
         return tile_go.GetComponent<Tile>();
-
     }
 
     public void SetGround(Ground t)

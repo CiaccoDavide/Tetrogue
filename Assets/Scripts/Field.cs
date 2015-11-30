@@ -10,7 +10,6 @@ public class Field : MonoBehaviour {
     public readonly static short Width = 8;
     public readonly static short Height = 12;
 
-
     public Tile[,] grid = new Tile[Field.Width, Field.Height];
     //"Constructor"
     public static Field Create()

@@ -140,7 +140,7 @@ public class Block : MonoBehaviour
         //altrimenti muovi in basso
         else
             SetPosition(coords.x, (short)(coords.y - 1));
-    }
+        }
 
     bool CollidesDown()
     {
@@ -221,12 +221,14 @@ public class Block : MonoBehaviour
             field.AddToGrid(tiles[i]);
             tiles[i] = null;
         }
+        PathFinder.ShortestPath(field, field.grid[1,0], field.grid[6,6]);
+
     }
 
     void Update(){
         timer += Time.deltaTime;
         // muovi il blocco verso il basso ogni secondo
-        if(timer>1)
+        if (timer > 1)
             MoveDown();
     }
 }
