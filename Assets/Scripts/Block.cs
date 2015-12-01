@@ -37,6 +37,8 @@ public class Block : MonoBehaviour
 
     private float timer = 0;
 
+    private static short DropAmount = 6;
+
     //"Constructor"
     public static Block Create()
     {
@@ -117,7 +119,7 @@ public class Block : MonoBehaviour
         coords.x = x;
         coords.y = y;
         float conversion = Tile.TileSize * 1.0f / Global.PixelToUnit;
-        transform.localPosition = new Vector3(((int)x - Field.Width / 2) * conversion, ((int)y - Field.Height / 2) * conversion, 0);
+        transform.localPosition = new Vector3(x * conversion, y * conversion, 0);
     }
 
     public void MoveRight()
@@ -225,13 +227,12 @@ public class Block : MonoBehaviour
             tiles[i].x += coords.x;
             tiles[i].y += coords.y;
             if (tiles[i].y > maxy) maxy = tiles[i].y;
+            tiles[i].transform.parent = Field.field.transform;
             field.AddToGrid(tiles[i]);
             tiles[i] = null;
         }
-        if (maxy > Field.Height - 6)
-            field.Collapse(6 + maxy - Field.Height);
-
-        //PathFinder.ShortestPath(field, field.grid[1,0], field.grid[6,6]);
+        if (maxy > Field.Height - DropAmount)
+            field.Collapse((short)(DropAmount + maxy - Field.Height));
 
     }
 

@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class Field : MonoBehaviour
 {
+    //Just the current instance, to be accessed from other scripts
+    public static Field field;
 
     //the field holds a single block
     private Block block;
@@ -17,13 +19,16 @@ public class Field : MonoBehaviour
     //"Constructor"
     public static Field Create()
     {
-        // Pool creation
-        Tile.InitializePool();
+       
 
         //Field creation
         GameObject field = Instantiate(Resources.Load("Prefabs/Field")) as GameObject;
         field.name = "Field";
         Field field_scr = field.GetComponent<Field>();
+        Field.field = field_scr;
+
+        // Pool creation
+        Tile.InitializePool();
 
         //Block creation
         field_scr.block = Block.Create();
@@ -31,6 +36,8 @@ public class Field : MonoBehaviour
         field_scr.block.field = field_scr;
         field_scr.block.ResetBlock();
 
+       
+        
         return field_scr;
     }
     public void HandleInput()
@@ -46,11 +53,10 @@ public class Field : MonoBehaviour
     public void AddToGrid(Tile tile)
     {
         grid[tile.x, tile.y] = tile;
-        tile.transform.parent = transform.Find("Relativo");
         tile.SetPosition(tile.x, tile.y);
     }
 
-    public void Collapse(int drop)
+    public void Collapse(short drop)
     {
 
         for (int y = 0; y < Field.Height; y++)

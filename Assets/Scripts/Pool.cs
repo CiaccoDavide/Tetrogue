@@ -11,7 +11,9 @@ public class Pool : MonoBehaviour
         pool = new Queue<GameObject>();
         for (int i = 0; i < (Field.Width * (Field.Height - 4) + 4); i++)
         {
-            pool.Enqueue(Instantiate(Resources.Load("Prefabs/Tile")) as GameObject);
+            GameObject temp_tile = Instantiate(Resources.Load("Prefabs/Tile")) as GameObject;
+            temp_tile.transform.parent = Field.field.transform;
+            pool.Enqueue(temp_tile);
         }
     }
 

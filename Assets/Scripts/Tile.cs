@@ -35,13 +35,11 @@ public class Tile : MonoBehaviour
         x = _x;
         y = _y;
         float conversion = TileSize * 1.0f / Global.PixelToUnit;
-        transform.localPosition = new Vector3(x * conversion, y * conversion, 0);
+        transform.localPosition = new Vector3((x-Field.Width/2) * conversion, (y-Field.Height/2) * conversion, 0);
     }
 
-    public void GoDown(int times)
+    public void GoDown(short times)
     {
-        y = (short)(y - times);
-        float conversion = TileSize * 1.0f / Global.PixelToUnit;
-        transform.localPosition = new Vector3(x * conversion, y * conversion, 0);
+        SetPosition(x, (short)(y - times));
     }
 }
