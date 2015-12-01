@@ -13,9 +13,7 @@ public class Field : MonoBehaviour
     public readonly static short Height = 12;
 
     public Tile[,] grid = new Tile[Field.Width, Field.Height];
-    /* USELESS LIST
-    public List<Tile> tilesList = new List<Tile>();
-    */
+
     //"Constructor"
     public static Field Create()
     {
@@ -49,31 +47,11 @@ public class Field : MonoBehaviour
     {
         grid[tile.x, tile.y] = tile;
         tile.transform.parent = transform.Find("Relativo");
-        /* USELESS LIST
-        tilesList.Add(tile);
-        */
         tile.SetPosition(tile.x, tile.y);
     }
 
     public void Collapse(int drop)
     {
-        /* USELESS LIST
-        for (int i = 0; i < tilesList.Count; i++)
-        {
-            if (tilesList[i].y < drop)
-            {
-                Pool.RecycleTile(tilesList[i]);
-                tilesList.Remove(tilesList[i]);
-                i--;
-            }
-        }
-
-        foreach (Tile tile in tilesList)
-        {
-            tile.GoDown(drop);
-            grid[tile.x, tile.y - drop] = grid[tile.x, tile.y];
-            grid[tile.x, tile.y] = null;
-        }*/
 
         for (int y = 0; y < Field.Height; y++)
         {
